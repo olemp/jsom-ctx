@@ -1,8 +1,9 @@
 {
   "name": "jsom-ctx",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A overlay on JSOM for use with async/await",
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
