@@ -1,4 +1,5 @@
 export interface IJsomContext {
+    url: string;
     isLoaded: boolean;
     clientContext: SP.ClientContext;
     web: SP.Web;
@@ -17,12 +18,12 @@ function __getClientContext(url: string) {
 
 const JsomContext = {
     Context: class Context implements IJsomContext {
-        private url: string;
+        public url: string;
         public isLoaded: boolean;
-        clientContext: SP.ClientContext;
-        web: SP.Web;
-        lists: SP.ListCollection;
-        propBag: SP.FieldStringValues;
+        public clientContext: SP.ClientContext;
+        public web: SP.Web;
+        public lists: SP.ListCollection;
+        public propBag: SP.FieldStringValues;
 
         constructor(url: string) {
             this.isLoaded = false;
