@@ -34,6 +34,7 @@ export class JsomContext implements IJsomContext {
         this.web = this.clientContext.get_web();
         this.lists = this.web.get_lists();
         this.propBag = this.web.get_allProperties();
+        this.isLoaded = true;
         return this;
     }
 }
@@ -48,7 +49,7 @@ export function ExecuteJsomQuery(ctx: IJsomContext, clientObjectsToLoad: SP.Clie
                 reject({ sender, args });
             })
         } else {
-            reject();
+            reject("JsomContext is not loaded");
         }
     });
 }
