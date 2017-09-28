@@ -1,7 +1,7 @@
 {
   "name": "jsom-ctx",
   "version": "1.0.0",
-  "description": "A overlay on JSOM for use with async/await",
+  "description": "Simplifies JSOM usage, and allows for async-await",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
