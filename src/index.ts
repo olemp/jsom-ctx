@@ -29,17 +29,21 @@ export class JsomContext implements IJsomContext {
         this.url = url;
     }
 
-    public async load(): Promise<IJsomContext> {
-        this.clientContext = await __getClientContext(this.url);
-        this.web = this.clientContext.get_web();
-        this.lists = this.web.get_lists();
-        this.propBag = this.web.get_allProperties();
-        this.isLoaded = true;
-        return this;
+    public async load(): Promise<JsomContext> {
+        try {
+            this.clientContext = await __getClientContext(this.url);
+            this.web = this.clientContext.get_web();
+            this.lists = this.web.get_lists();
+            this.propBag = this.web.get_allProperties();
+            this.isLoaded = true;
+            return this;
+        } catch (err) {
+            throw `Failed to load context for url ${this.url}`;
+        }
     }
 }
 
-export function ExecuteJsomQuery(ctx: IJsomContext, clientObjectsToLoad: SP.ClientObject[] = []) {
+export function ExecuteJsomQuery(ctx: JsomContext, clientObjectsToLoad: SP.ClientObject[] = []) {
     return new Promise<{ sender, args }>((resolve, reject) => {
         if (ctx.isLoaded) {
             clientObjectsToLoad.forEach(clientObj => ctx.clientContext.load(clientObj));

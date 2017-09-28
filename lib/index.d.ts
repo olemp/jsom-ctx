@@ -15,9 +15,9 @@ export declare class JsomContext implements IJsomContext {
     lists: SP.ListCollection;
     propBag: SP.FieldStringValues;
     constructor(url: string);
-    load(): Promise<IJsomContext>;
+    load(): Promise<JsomContext>;
 }
-export declare function ExecuteJsomQuery(ctx: IJsomContext, clientObjectsToLoad?: SP.ClientObject[]): Promise<{
+export declare function ExecuteJsomQuery(ctx: JsomContext, clientObjectsToLoad?: SP.ClientObject[]): Promise<{
     sender: any;
     args: any;
 }>;
