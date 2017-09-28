@@ -1,5 +1,5 @@
 # jsom-ctx
-Simplifies JSOM usage
+Simplifies JSOM usage, and allows for async-await.
 
 # Examples
 Get web title for current web
