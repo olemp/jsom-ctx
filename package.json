@@ -1,6 +1,6 @@
 {
   "name": "jsom-ctx",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A overlay on JSOM for use with async/await",
   "main": "lib/index.js",
   "scripts": {

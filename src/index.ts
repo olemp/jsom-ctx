@@ -38,7 +38,7 @@ export class JsomContext implements IJsomContext {
     }
 }
 
-export function ExecuteQuery(ctx: IJsomContext, clientObjectsToLoad: SP.ClientObject[] = []) {
+export function ExecuteJsomQuery(ctx: IJsomContext, clientObjectsToLoad: SP.ClientObject[] = []) {
     return new Promise<{ sender, args }>((resolve, reject) => {
         if (ctx.isLoaded) {
             clientObjectsToLoad.forEach(clientObj => ctx.clientContext.load(clientObj));
