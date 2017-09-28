@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/olemp/jsom-ctx/issues"
   },
-  "homepage": "https://github.com/olemp/jsom-ctx#readme"
+  "homepage": "https://github.com/olemp/jsom-ctx#readme",
+  "devDependencies": {
+    "@types/sharepoint": "^2013.1.9"
+  }
 }
