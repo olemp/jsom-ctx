@@ -1,6 +1,5 @@
 export interface IJsomContext {
     url: string;
-    isLoaded: boolean;
     clientContext: SP.ClientContext;
     web: SP.Web;
     lists: SP.ListCollection;
@@ -18,14 +17,14 @@ function __getClientContext(url: string) {
 
 export class JsomContext implements IJsomContext {
     public url: string;
-    public isLoaded: boolean;
     public clientContext: SP.ClientContext;
     public web: SP.Web;
+    public site: SP.Site;
+    public rootWeb: SP.Web;
     public lists: SP.ListCollection;
     public propBag: SP.FieldStringValues;
 
     constructor(url: string) {
-        this.isLoaded = false;
         this.url = url;
     }
 
@@ -33,9 +32,10 @@ export class JsomContext implements IJsomContext {
         try {
             this.clientContext = await __getClientContext(this.url);
             this.web = this.clientContext.get_web();
+            this.site = this.clientContext.get_site();
+            this.rootWeb = this.clientContext.get_site().get_rootWeb();
             this.lists = this.web.get_lists();
             this.propBag = this.web.get_allProperties();
-            this.isLoaded = true;
             return this;
         } catch (err) {
             throw `Failed to load context for url ${this.url}`;
@@ -43,18 +43,20 @@ export class JsomContext implements IJsomContext {
     }
 }
 
+export async function CreateJsomContext(url: string): Promise<JsomContext> {
+    let _ = new JsomContext(url);
+    let jsomCtx = await _.load();
+    return jsomCtx;
+}
+
 export function ExecuteJsomQuery(ctx: JsomContext, clientObjectsToLoad: SP.ClientObject[] = []) {
     return new Promise<{ sender, args }>((resolve, reject) => {
-        if (ctx.isLoaded) {
-            clientObjectsToLoad.forEach(clientObj => ctx.clientContext.load(clientObj));
-            ctx.clientContext.executeQueryAsync((sender, args) => {
-                resolve({ sender, args });
-            }, (sender, args) => {
-                reject({ sender, args });
-            })
-        } else {
-            reject("JsomContext is not loaded");
-        }
+        clientObjectsToLoad.forEach(clientObj => ctx.clientContext.load(clientObj));
+        ctx.clientContext.executeQueryAsync((sender, args) => {
+            resolve({ sender, args });
+        }, (sender, args) => {
+            reject({ sender, args });
+        })
     });
 }
 

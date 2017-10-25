@@ -1,6 +1,6 @@
 {
   "name": "jsom-ctx",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "Simplifies JSOM usage, and allows for async-await",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
