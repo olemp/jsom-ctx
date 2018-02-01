@@ -49,9 +49,15 @@ export async function CreateJsomContext(url: string): Promise<JsomContext> {
     return jsomCtx;
 }
 
-export function ExecuteJsomQuery(ctx: JsomContext, clientObjectsToLoad: SP.ClientObject[] = []) {
+export function ExecuteJsomQuery(ctx: JsomContext, load: Array<{ clientObject: any, exps?: string }> = []) {
     return new Promise<{ sender, args }>((resolve, reject) => {
-        clientObjectsToLoad.forEach(clientObj => ctx.clientContext.load(clientObj));
+        load.forEach(l => {
+            if (l.exps) {
+                ctx.clientContext.load(l.clientObject, l.exps);
+            } else {
+                ctx.clientContext.load(l.clientObject);
+            }
+        });
         ctx.clientContext.executeQueryAsync((sender, args) => {
             resolve({ sender, args });
         }, (sender, args) => {

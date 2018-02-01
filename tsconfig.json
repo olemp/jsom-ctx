@@ -22,8 +22,5 @@
         "pretty": true,
         "allowSyntheticDefaultImports": true
     },
-    "include": [
-        "src/**/*",
-        "node_modules/**/*"
-    ]
+    "include": ["src/**/*"]
 }

@@ -5,7 +5,7 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "watch": "tsc --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -27,5 +27,8 @@
   "homepage": "https://github.com/olemp/jsom-ctx#readme",
   "devDependencies": {
     "@types/sharepoint": "^2013.1.9"
+  },
+  "dependencies": {
+    "@microsoft/sp-loader": "^1.4.0"
   }
 }
