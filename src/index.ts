@@ -1,3 +1,5 @@
+import { SPComponentLoader } from '@microsoft/sp-loader';
+
 export interface IJsomContext {
     url: string;
     clientContext: SP.ClientContext;
@@ -6,13 +8,10 @@ export interface IJsomContext {
     propBag: SP.FieldStringValues;
 }
 
-function __getClientContext(url: string) {
-    return new Promise<SP.ClientContext>((resolve, reject) => {
-        SP.SOD.executeFunc("sp.js", "SP.ClientContext", () => {
-            const clientContext = new SP.ClientContext(url);
-            resolve(clientContext);
-        });
-    });
+async function _getClientContext(url: string) {
+    await SPComponentLoader.loadScript('/_layouts/15/SP.js', { globalExportsName: 'SP' });
+    const clientContext = new SP.ClientContext(url);
+    return clientContext;
 }
 
 export class JsomContext implements IJsomContext {
@@ -30,7 +29,7 @@ export class JsomContext implements IJsomContext {
 
     public async load(): Promise<JsomContext> {
         try {
-            this.clientContext = await __getClientContext(this.url);
+            this.clientContext = await _getClientContext(this.url);
             this.web = this.clientContext.get_web();
             this.site = this.clientContext.get_site();
             this.rootWeb = this.clientContext.get_site().get_rootWeb();
