@@ -29,7 +29,5 @@
   "devDependencies": {
     "@types/sharepoint": "^2013.1.9"
   },
-  "dependencies": {
-    "@microsoft/sp-loader": "^1.4.0"
-  }
+  "dependencies": {}
 }
