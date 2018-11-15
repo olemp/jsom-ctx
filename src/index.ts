@@ -12,8 +12,10 @@ export interface IJsomContext {
 
 async function _getClientContext(url: string) {
     await SPComponentLoader.loadScript('/_layouts/15/SP.js', { globalExportsName: 'SP' });
-    const clientContext = new SP.ClientContext(url);
-    return clientContext;
+    if (url) {
+        return new SP.ClientContext(url);
+    }
+    return SP.ClientContext.get_current();
 }
 
 export class JsomContext implements IJsomContext {
@@ -30,10 +32,10 @@ export class JsomContext implements IJsomContext {
     /**
      * Constructor
      * 
-     * @param {string} url URL
+     * @param {string} url URL (defaults to current)
      * @param {string} appContextSiteUrl App context site URL
      */
-    public constructor(url: string, appContextSiteUrl?: string) {
+    public constructor(url?: string, appContextSiteUrl?: string) {
         this.url = url;
         this.appContextSiteUrl = appContextSiteUrl;
     }
@@ -61,16 +63,21 @@ export class JsomContext implements IJsomContext {
 /**
  * Creates a JSOM context object
  * 
- * @param {string} url URL
+ * @param {string} url URL (defaults to current)
  * @param {string} appContextSiteUrl App context site URL
  */
-export async function CreateJsomContext(url: string, appContextSiteUrl?: string): Promise<JsomContext> {
+export async function CreateJsomContext(url?: string, appContextSiteUrl?: string): Promise<JsomContext> {
     let _ = new JsomContext(url, appContextSiteUrl);
     let jsomCtx = await _.load();
     return jsomCtx;
 }
 
-export function ExecuteJsomQuery(ctx: JsomContext, load: Array<{ clientObject: any, exps?: string }> = []) {
+export interface IJsomLoadObject {
+    clientObject: any;
+    exps?: string;
+}
+
+export function ExecuteJsomQuery(ctx: JsomContext, load: Array<IJsomLoadObject> = []) {
     return new Promise<{ sender, args }>((resolve, reject) => {
         try {
             load.forEach(l => {

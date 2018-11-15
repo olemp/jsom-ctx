@@ -21,23 +21,24 @@ export declare class JsomContext implements IJsomContext {
     /**
      * Constructor
      *
-     * @param {string} url URL
+     * @param {string} url URL (defaults to current)
      * @param {string} appContextSiteUrl App context site URL
      */
-    constructor(url: string, appContextSiteUrl?: string);
+    constructor(url?: string, appContextSiteUrl?: string);
     load(): Promise<JsomContext>;
 }
 /**
  * Creates a JSOM context object
  *
- * @param {string} url URL
+ * @param {string} url URL (defaults to current)
  * @param {string} appContextSiteUrl App context site URL
  */
-export declare function CreateJsomContext(url: string, appContextSiteUrl?: string): Promise<JsomContext>;
-export declare function ExecuteJsomQuery(ctx: JsomContext, load?: Array<{
+export declare function CreateJsomContext(url?: string, appContextSiteUrl?: string): Promise<JsomContext>;
+export interface IJsomLoadObject {
     clientObject: any;
     exps?: string;
-}>): Promise<{
+}
+export declare function ExecuteJsomQuery(ctx: JsomContext, load?: Array<IJsomLoadObject>): Promise<{
     sender: any;
     args: any;
 }>;
