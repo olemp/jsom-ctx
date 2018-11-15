@@ -6,7 +6,8 @@
   "types": "./lib/index.d.ts",
   "scripts": {
     "watch": "tsc --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postversion": "tsc --build && npm publish"
   },
   "repository": {
     "type": "git",

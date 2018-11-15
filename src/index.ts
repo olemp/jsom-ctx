@@ -3,6 +3,8 @@ import { SPComponentLoader } from '@microsoft/sp-loader';
 export interface IJsomContext {
     url: string;
     clientContext: SP.ClientContext;
+    appContextSite?: SP.AppContextSite;
+    appContextSiteUrl?: string;
     web: SP.Web;
     lists: SP.ListCollection;
     propBag: SP.FieldStringValues;
@@ -17,14 +19,23 @@ async function _getClientContext(url: string) {
 export class JsomContext implements IJsomContext {
     public url: string;
     public clientContext: SP.ClientContext;
+    public appContextSite: SP.AppContextSite;
+    public appContextSiteUrl: string;
     public web: SP.Web;
     public site: SP.Site;
     public rootWeb: SP.Web;
     public lists: SP.ListCollection;
     public propBag: SP.FieldStringValues;
 
-    constructor(url: string) {
+    /**
+     * Constructor
+     * 
+     * @param {string} url URL
+     * @param {string} appContextSiteUrl App context site URL
+     */
+    public constructor(url: string, appContextSiteUrl?: string) {
         this.url = url;
+        this.appContextSiteUrl = appContextSiteUrl;
     }
 
     public async load(): Promise<JsomContext> {
@@ -32,7 +43,12 @@ export class JsomContext implements IJsomContext {
             this.clientContext = await _getClientContext(this.url);
             this.web = this.clientContext.get_web();
             this.site = this.clientContext.get_site();
-            this.rootWeb = this.clientContext.get_site().get_rootWeb();
+            if (this.appContextSiteUrl) {
+                this.appContextSite = new SP.AppContextSite(this.clientContext, this.appContextSiteUrl);
+                this.web = this.appContextSite.get_web();
+                this.site = this.appContextSite.get_site();
+            }
+            this.rootWeb = this.site.get_rootWeb();
             this.lists = this.web.get_lists();
             this.propBag = this.web.get_allProperties();
             return this;
@@ -42,26 +58,36 @@ export class JsomContext implements IJsomContext {
     }
 }
 
-export async function CreateJsomContext(url: string): Promise<JsomContext> {
-    let _ = new JsomContext(url);
+/**
+ * Creates a JSOM context object
+ * 
+ * @param {string} url URL
+ * @param {string} appContextSiteUrl App context site URL
+ */
+export async function CreateJsomContext(url: string, appContextSiteUrl?: string): Promise<JsomContext> {
+    let _ = new JsomContext(url, appContextSiteUrl);
     let jsomCtx = await _.load();
     return jsomCtx;
 }
 
 export function ExecuteJsomQuery(ctx: JsomContext, load: Array<{ clientObject: any, exps?: string }> = []) {
     return new Promise<{ sender, args }>((resolve, reject) => {
-        load.forEach(l => {
-            if (l.exps) {
-                ctx.clientContext.load(l.clientObject, l.exps);
-            } else {
-                ctx.clientContext.load(l.clientObject);
-            }
-        });
-        ctx.clientContext.executeQueryAsync((sender, args) => {
-            resolve({ sender, args });
-        }, (sender, args) => {
-            reject({ sender, args });
-        })
+        try {
+            load.forEach(l => {
+                if (l.exps) {
+                    ctx.clientContext.load(l.clientObject, l.exps);
+                } else {
+                    ctx.clientContext.load(l.clientObject);
+                }
+            });
+            ctx.clientContext.executeQueryAsync((sender, args) => {
+                resolve({ sender, args });
+            }, (sender, args) => {
+                reject({ sender, args });
+            })
+        } catch (error) {
+            reject(error);
+        }
     });
 }
 
