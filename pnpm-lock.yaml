@@ -1,0 +1,16 @@
+devDependencies:
+  '@types/sharepoint': 2016.1.7
+lockfileVersion: 5.1
+packages:
+  /@types/microsoft-ajax/0.0.35:
+    dev: true
+    resolution:
+      integrity: sha512-uM+VKi5q/EjhsCSfH/raPPB5qxuSuOIgmn03LEpDrvDKgsFxvTFeeaRIgib2imNAm7GOQ4MhgsNWiIRGK/YxcQ==
+  /@types/sharepoint/2016.1.7:
+    dependencies:
+      '@types/microsoft-ajax': 0.0.35
+    dev: true
+    resolution:
+      integrity: sha512-MPyaZklLfKuzNnfh7iix0IgDZ838Mk+PaormXkI8ysheFVHbEHPhhkjmi1oHn1/mOFUz0tzFE8AQ6nTxP29Jww==
+specifiers:
+  '@types/sharepoint': ^2016.1.7
