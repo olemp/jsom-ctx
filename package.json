@@ -1,6 +1,6 @@
 {
   "name": "jsom-ctx",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Simplifies JSOM usage, and allows for async-await",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -27,7 +27,6 @@
   },
   "homepage": "https://github.com/olemp/jsom-ctx#readme",
   "devDependencies": {
-    "@types/sharepoint": "^2013.1.9"
-  },
-  "dependencies": {}
+    "@types/sharepoint": "^2016.1.7"
+  }
 }
